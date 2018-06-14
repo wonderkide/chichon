@@ -2,18 +2,23 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use app\components\helpFunction;
+use frontend\components\helpFunction;
+use yii\widgets\Breadcrumbs;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\MatchModel */
 
 $this->title = $model->username;
-$this->params['breadcrumbs'][] = ['label' => 'Match Models', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'User', 'url' => ['/user']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="match-model-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+    <?= Breadcrumbs::widget([
+        'homeLink' => ['label' => 'Admin',
+        'url' => Yii::$app->getHomeUrl()],
+        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+    ]) ?>
+    <!--<h1><?= Html::encode($this->title) ?></h1>-->
 
     <p>
         <?= Html::a('Update', ['editusr', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -30,11 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'id_rank',
+            //'id_rank',
             'username',
-            'email',
-            'nickname',
-            'status',
+            //'email',
+            //'nickname',
+            //'status',
             [
                 'format'=>'text',
                 //'label' => 'color',
@@ -47,10 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'updated_at',
                 'value' => helpFunction::dateTimeMinute(date("Y-m-d h:i:s",$model->updated_at))
             ],
-            'post_point',
-            'permission',
-            'zeny',
-            'ip',
+            //'post_point',
+            //'permission',
+            //'zeny',
+            //'ip',
         ],
     ]) ?>
 

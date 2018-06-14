@@ -1,6 +1,6 @@
-
 <?php
-namespace app\models;
+namespace common\models;
+
 use Yii;
 use yii\imagine\Image;
 use app\models\MainDataModel;
@@ -24,6 +24,7 @@ class UserModel extends \yii\db\ActiveRecord {
     
     public $password;
     public $imageFile;
+    public $role;
     /**
      * @inheritdoc
      */
@@ -35,16 +36,17 @@ class UserModel extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['username', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at', 'permission'], 'required', 'message' => 'กรุณากรอก {attribute}'],
-            [['status', 'created_at', 'updated_at', 'permission', 'id_rank', 'exp'], 'integer'],
-            [['username', 'password_hash', 'password_reset_token', 'email', 'image', 'image_crop'], 'string', 'max' => 255],
-            [['nickname'], 'string', 'max' => 128],
-            ['nickname', 'allowNickname'],
-            [['auth_key'], 'string', 'max' => 32],
-            [['zeny'], 'number'],
+            [['username', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at'], 'required', 'message' => 'กรุณากรอก {attribute}'],
+            [['status', 'created_at', 'updated_at'], 'integer'],
+            [['username', 'password_hash', 'password_reset_token', 'email'/*, 'image'*/, 'image_crop'], 'string', 'max' => 255],
+            //[['nickname'], 'string', 'max' => 128],
+            //['nickname', 'allowNickname'],
+            [['auth_key','role'], 'string', 'max' => 32],
+            //[['zeny'], 'number'],
             [['email'], 'email'],
             ['email', 'emailAlready'],
-            //['email', 'unique', 'targetClass' => 'app\models\UserAuth', 'message' => 'This username has already been taken.'],
+            //[['role'], 'string', 'max' => 32],
+            //['email', 'unique', 'targetClass' => 'common\models\User', 'message' => 'This username has already been taken.'],
             //['imageFile', 'file', 'extensions' => 'jpeg, gif, png, jpg', 'on' => ['insert', 'update']],
             [['imageFile'], 'file', 'skipOnEmpty' => TRUE, 'extensions' => 'jpg, gif, png'],
             

@@ -27,29 +27,29 @@ use yii\grid\GridView;
                     //'auth_key',
                     //'password_hash',
                     //'password_reset_token',
-                    // 'email:email',
+                    'email:email',
                     // 'status',
                     // 'created_at',
                     // 'updated_at',
                     // 'permission',
-                    [
+                    /*[
                         'class' => 'yii\grid\DataColumn',
                         'attribute' => 'permission',
                         'format' => 'text',
                         'value' => function ($data) {
                             return Yii::$app->params['permission'][$data->permission];
                         },
-                    ],
-                    'id_rank',
-                    'exp',
+                    ],*/
+                    //'id_rank',
+                    //'exp',
                     ['class' => 'yii\grid\ActionColumn',
                         'template' => '{view} {update} {re_pass} {delete}',
                         'buttons' => [
                             'update' => function ($url, $model) {
-                                return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '/wonderkide/users/editusr/' . $model->id);
+                                return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '/user/editusr/' . $model->id);
                             },
                             're_pass' => function ($url, $model) {
-                                return Html::a('<span class="glyphicon glyphicon-certificate"></span>', '/wonderkide/users/resetpassword/' . $model->id);
+                                return Html::a('<span class="glyphicon glyphicon-certificate"></span>', '/user/resetpassword/' . $model->id);
                             },
                             /*'delete' => function ($url, $model) {
                                 return Html::a('<span class="glyphicon glyphicon-trash"></span>', '/wonderkide/users/deleteusr/' . $model->id);

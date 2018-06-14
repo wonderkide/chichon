@@ -1,17 +1,16 @@
 <?php
 namespace backend\controllers;
+
 use Yii;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
-use app\models\UserSearch;
-use app\models\UserModel;
-use app\models\SignupAdminForm;
+use backend\models\UserSearch;
+use common\models\UserModel;
+use backend\models\SignupAdminForm;
 use common\models\RePassword;
 use yii\filters\AccessControl;
-//use app\components\AccessRule;
-//use app\models\UserAuth;
-//use app\models\RankModel;
-class UserController extends Controller
+use backend\components\AdminController;
+
+class UserController extends AdminController
 {
     public function behaviors()
     {
@@ -22,28 +21,21 @@ class UserController extends Controller
                     'delete' => ['post'],
                 ],
             ],
-            'access' => [
-                   'class' => AccessControl::className(),
-                   // We will override the default rule config with the new AccessRule class
-                   /*'ruleConfig' => [
-                       'class' => AccessRule::className(),
-                   ],*/
-                   //'only' => ['index','create', 'update', 'delete', 'user','createusr'],
-                   'rules' => [
-                       [
-                           //'actions' => ['index','create','user'],
-                           'allow' => true,
-                           // Allow users, moderators and admins to create
-                           'roles' => [
-                               //UserAuth::STATUS_ACTIVE,
-                               //UserAuth::PERMISSION_DEVIL,
-                               //UserAuth::STATUS_DELETED
-                               //UserAuth::PERMISSION_NEWBIE,
-                           ],
-                       ],
-                       
-                   ],
-               ], 
+            'access'=>[
+                'class'=>AccessControl::className(),
+                'rules'=>[
+                [
+                    'actions'=>['index','createusr','view','editusr','resetpassword'],
+                    'roles'=>['ManageUser'],
+                    'allow'=>true
+                ],
+                [
+                    'allow'=>true,
+                    'actions'=>['delete'],
+                    'roles'=>['Admin']
+                ]
+              ]
+            ],
         ];
     }
     
@@ -58,27 +50,53 @@ class UserController extends Controller
     public function actionCreateusr()
     {   
         $model = new SignupAdminForm();
-        $rank = RankModel::genToDropdown();
+        $dropdown = $this->getAuthDropdown();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
-                return $this->redirect('/wonderkide/users');
+                return $this->redirect('/user');
             }
         }
         return $this->render('create', [
             'model' => $model,
-            'rank' => $rank,
+            'dropdown' => $dropdown,
         ]);
     }
     public function actionEditusr($id)
     {
+        $assign = $this->findAssignment(Yii::$app->user->id, 'Admin');
+        $is_admin = $this->findAssignment($id, 'Admin');
+        if(!$assign && $is_admin){
+            $this->notAllowed();
+        }
         $model = $this->findModel($id);
-        $rank = RankModel::genToDropdown();
+        $dropdown = $this->getAuthDropdown();
+        $auth = Yii::$app->authManager;
+        $is_assignment = $auth->getAssignments($id);
+        $rolename = null;
+        if($is_assignment){
+            foreach ($is_assignment as $row) {
+                $rolename = $row->roleName;
+                $model->role = $row->roleName;
+            }
+        }
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect('/wonderkide/users');
+            if($model->role == 'User' && $is_assignment){
+                $this->removePermission($model->id);
+            }
+            else if(!$is_assignment){
+                $auth->assign($auth->getRole($model->role), $model->id);
+            }
+            else if($model->role != $rolename){
+                $this->removePermission($model->id);
+                $auth->assign($auth->getRole($model->role), $model->id);
+            }
+            return $this->redirect('/user');
         } else {
+            
             return $this->render('update', [
                 'model' => $model,
-                'rank' => $rank,
+                'dropdown' => $dropdown,
             ]);
         }
     }
@@ -93,16 +111,21 @@ class UserController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-        return $this->redirect('/wonderkide/users');
+        $this->removePermission($id);
+        return $this->redirect('/user');
     }
     
     public function actionResetpassword($id) {
+        $assign = $this->findAssignment(Yii::$app->user->id, 'Admin');
+        if(!$assign && Yii::$app->user->id != $id){
+            $this->notAllowed();
+        }
         
         $model = new RePassword();
         $model->id = $id;
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->reset()) {
-                return $this->redirect('/wonderkide/users');
+                return $this->redirect('/user');
             }
         }
         return $this->render('resetpassword', [
@@ -123,6 +146,25 @@ class UserController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    protected function getAuthDropdown() {
+        $auth = Yii::$app->authManager;
+        $dd = [];
+        $dd['User'] = 'User :: ผู้ใช้งานทั่วไป';
+        foreach ($auth->getRoles() as $row) {
+            if($row->name != 'Admin'){
+                $dd[$row->name] = $row->name . ' :: ' . $row->description;
+            }
+            else if($row->name == 'Admin' && Yii::$app->user->id == 1){
+                $dd[$row->name] = $row->name . ' :: ' . $row->description;
+            }
+        }
+        return $dd;
+    }
+    protected function removePermission($id) {
+        $auth = Yii::$app->authManager;
+        $auth->revokeAll($id);
     }
     
 }

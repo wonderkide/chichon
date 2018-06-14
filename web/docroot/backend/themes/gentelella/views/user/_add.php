@@ -21,7 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'password')->passwordInput() ?>
             
                 <?= $form->field($model, 're_password')->passwordInput() ?>
-            
+    
+                <?php echo $form->field($model, 'role')->dropDownList($dropdown); ?>
+    
                 <?php //echo $form->field($model, 'permission') ?>
 
                 <div class="form-group">

@@ -17,7 +17,7 @@ gtlAsset::register($this);
     <link rel="shortcut icon" href="<?php //MainDataModel::getIcon(); ?>" type="image/x-icon" />
     
     <?= Html::csrfMetaTags() ?>
-    <title>IN-MEMORIES | Dashboard</title>
+    <title>Chichon | Dashboard</title>
     <?php $this->head() ?>
     
     <?php /*
@@ -116,7 +116,7 @@ gtlAsset::register($this);
                       </a>
                     </li>-->
                     <li><a href="/user/resetpassword/<?=Yii::$app->user->id?>"><i class="fa fa-key pull-right"></i> เปลี่ยน Password</a></li>
-                    <li><a href="/site/logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                    <li><a href="/site/logout" data-method="post"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                   </ul>
                 </li>
                 <?php /*
@@ -231,7 +231,7 @@ gtlAsset::register($this);
      */
     ?>
     <?php //Get all flash messages and loop through them ?>
-    <?php foreach (Yii::$app->session->getAllFlashes() as $message):; ?>
+    <?php foreach (Yii::$app->session->getAllFlashes() as $message): ?>
         <?php
         echo Growl::widget([
             'type' => (!empty($message['type'])) ? $message['type'] : 'danger',

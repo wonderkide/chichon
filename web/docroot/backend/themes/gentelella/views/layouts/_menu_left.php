@@ -5,7 +5,7 @@
 
 <!-- sidebar menu -->
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-    <div class="menu_section">
+    <!--<div class="menu_section">
         <h3>จัดการ Content</h3>
         <ul class="nav side-menu">
             <li><a><i class="fa fa-home"></i> Content หลัก <span class="fa fa-chevron-down"></span></a>
@@ -100,23 +100,23 @@
         <ul class="nav side-menu">
             <li><a href="/wonderkide/url"><i class="fa fa-link"></i> จัดการ Url </a></li>
         </ul>
-    </div>
+    </div>-->
     <?php 
     //if(UserAuth::PERMISSION_DEVIL == $user->permission){
     ?>
     <div class="menu_section">
         <h3>Users</h3>
         <ul class="nav side-menu">
-            <li><a href="/wonderkide/users"><i class="fa fa-users"></i> จัดการ user </a></li>
+            <li><a href="/user"><i class="fa fa-users"></i> จัดการ user </a></li>
         </ul>
     </div>
-    <div class="menu_section">
+    <!--<div class="menu_section">
         <h3>Setting</h3>
         <ul class="nav side-menu">
             <li><a href="/wonderkide/setting"><i class="fa fa-lock"></i> การตั้งค่าระบบ </a></li>
             <li><a href="/wonderkide/logdata"><i class="fa fa-history"></i> ประวัติการทำงาน </a></li>
         </ul>
-    </div>
+    </div>-->
     <?php //} ?>
 
 </div>

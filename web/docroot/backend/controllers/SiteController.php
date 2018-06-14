@@ -2,15 +2,15 @@
 namespace backend\controllers;
 
 use Yii;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use backend\components\AdminController;
 
 /**
  * Site controller
  */
-class SiteController extends Controller
+class SiteController extends AdminController
 {
     /**
      * {@inheritdoc}
@@ -22,15 +22,16 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
+                        'actions' => ['index','logout'],
+                        'allow' => true,
+                        'roles'=>['Author']
+                    ],
+                    [
                         'actions' => ['login', 'error'],
                         'allow' => true,
                     ],
-                    [
-                        'actions' => ['logout', 'index'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
                 ],
+                
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -76,6 +77,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            $this->checkPermission();
             return $this->goBack();
         } else {
             $this->layout = 'login';

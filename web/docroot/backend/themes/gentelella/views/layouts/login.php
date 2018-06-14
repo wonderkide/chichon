@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>IN-MEMORIES | Login</title>
+    <title>Chichon | Login</title>
 
     <!-- Bootstrap -->
     <link href="<?= Yii::$app->assetManager->getPublishedUrl('@gtlAsset'); ?>/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">

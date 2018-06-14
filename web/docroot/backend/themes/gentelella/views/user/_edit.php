@@ -21,16 +21,17 @@ use yii\widgets\ActiveForm;
     <?php //echo $form->field($model, 'password_reset_token')->textInput(['maxlength' => true]) ?>
 
     <?php echo $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+    <?php echo $form->field($model, 'role')->dropDownList($dropdown); ?>
 
     <?php //echo $form->field($model, 'status')->textInput() ?>
-    <?php echo $form->field($model, 'status')->dropDownList(Yii::$app->params['statusMember']); ?>
+    <?php //echo $form->field($model, 'status')->dropDownList(Yii::$app->params['statusMember']); ?>
 
     <?php //echo $form->field($model, 'created_at')->textInput() ?>
 
     <?php //echo $form->field($model, 'updated_at')->textInput() ?>
-    <?php echo $form->field($model, 'permission')->dropDownList(Yii::$app->params['permission']); ?>
-    <?php echo $form->field($model, 'id_rank')->dropDownList($rank); ?>
-    <?php echo $form->field($model, 'exp')->textInput(['maxlength' => true]); ?>
+    <?php //echo $form->field($model, 'permission')->dropDownList(Yii::$app->params['permission']); ?>
+    <?php //echo $form->field($model, 'id_rank')->dropDownList($rank); ?>
+    <?php //echo $form->field($model, 'exp')->textInput(['maxlength' => true]); ?>
     <?php //echo $form->field($model, 'permission')->textInput() ?>
 
     <div class="form-group">
